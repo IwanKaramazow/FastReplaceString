@@ -1,0 +1,34 @@
+{
+  "name": "fastreplacestring",
+  "version": "0.0.1",
+  "description": "Fast C native replacements of a string in a file. Low startup time makes this great for build scripts.",
+  "main": "index.js",
+  "scripts": {
+    "postinstall": "gcc -o ./.bin/replacestring -x c ./replacestring.c",
+    "test": "echo \"No test\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IwanKaramazow/FastReplaceString.git"
+  },
+  "bin": {
+    "replacestring": "./.bin/replacestring"
+  },
+  "keywords": [
+    "realpath"
+  ],
+  "exportedEnvVars": {
+    "PATH": {
+      "val": "./bin",
+      "resolveAsRelativePath": true,
+      "global": true,
+      "globalCollisionBehavior": "joinPath"
+    }
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/IwanKaramazow/FastReplaceString/issues"
+  },
+  "homepage": "https://github.com/IwanKaramazow/FastReplaceString#readme"
+}
