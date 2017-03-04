@@ -115,8 +115,9 @@ int main(int argc, char **argv){
 		exit(1);
     } else {
 		// filename_stage = filename + '.esy_rewrite'
-		// we know exactly how much to allocate: sizeof file + (".esy_rewrite") 12 + ('\0') 1 = 13
-		char filename_stage[sizeof(argv[1]) + 13];
+		// we know exactly how much to allocate: strlen filename + (".esy_rewrite") 12 + ('\0') 1 = 13
+		// TODO check if this is a proper reasoning ^^
+		char filename_stage[strlen(argv[1]) + 13];
 		char *p = filename_stage;
 		filename_stage[0] = '\0';
 		p = mystrcat(filename_stage, argv[1]);
