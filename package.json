@@ -1,10 +1,13 @@
 {
   "name": "fastreplacestring",
   "version": "0.0.1",
-  "description": "Fast C native replacements of a string in a file. Low startup time makes this great for build scripts.",
+  "description": "Fast C native replacement of a string in a file. Low startup time makes this great for build scripts.",
   "main": "index.js",
   "scripts": {
     "postinstall": "gcc -o ./.bin/replacestring -x c ./replacestring.c",
+    "replacestring": "./.bin/replacestring",
+    "infer": "infer -- gcc -o ./.bin/replacestring -x c ./replacestring.c",
+    "clean": "rm -rf ./.bin && mkdir ./.bin",
     "test": "echo \"No test\""
   },
   "repository": {
@@ -15,7 +18,7 @@
     "replacestring": "./.bin/replacestring"
   },
   "keywords": [
-    "realpath"
+    "replacestring"
   ],
   "exportedEnvVars": {
     "PATH": {

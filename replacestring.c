@@ -9,10 +9,9 @@
 #include <stdint.h>
 #endif
 
+// source: http://creativeandcritical.net/str-replace-c
 char *repl_str(const char *str, const char *from, const char *to)
 {
-    /* Adjust each of the below values to suit your needs. */
-
     /* Increment positions cache size initially by this number. */
     size_t cache_sz_inc = 16;
     /* Thereafter, each time capacity needs to be increased,
@@ -100,82 +99,81 @@ end_repl_str:
     return ret;
 }
 
-char* concat(const char *s1, const char *s2)
+// source: https://www.joelonsoftware.com/2001/12/11/back-to-basics/
+char* mystrcat( char* dest, char* src )
 {
-    const size_t len1 = strlen(s1);
-    const size_t len2 = strlen(s2);
-    char *result = malloc(len1+len2+1);//+1 for the zero-terminator
-    //in real code you would check for errors in malloc here
-    memcpy(result, s1, len1);
-    memcpy(result+len1, s2, len2+1);//+1 to copy the null-terminator
-    return result;
-}
-
-// What if the file is greater than 1,000 bytes?
-// There are various system calls that will give you the size of a file; a common one is stat.
-char *readFilee(char *fileName)
-{
-    FILE *file = fopen(fileName, "r");
-    char *code;
-    size_t n = 0;
-    int c;
-
-    if (file == NULL)
-        return NULL; //could not open file
-
-    code = malloc(1000);
-
-    while ((c = fgetc(file)) != EOF)
-    {
-        code[n++] = (char) c;
-    }
-
-    // don't forget to terminate with the null character
-    code[n] = '\0';        
-
-    return code;
+     while ((*dest)) dest++;
+     while ((*dest++ = *src++));
+     return --dest;
 }
 
 int main(int argc, char **argv){
-		// filename, src, dest = sys.argv[1:4]
+	// filename, src, dest = sys.argv[1:4]
     /* check if amount of args is correct, otherwise exit */
     if (argc != 4) {
-			fprintf(stderr, "`replaceString` except three arguments.\nUsage: replaceString filename src dest\n");
-			exit(1);
+		fprintf(stderr, "`replacestring` except three arguments.\nUsage: replacestring filename src dest\n");
+		exit(1);
     } else {
-			// filename_stage = filename + '.esy_rewrite'
-			char* filename_stage = concat(argv[1], ".esy_rewrite");
+		// filename_stage = filename + '.esy_rewrite'
+		// we know exactly how much to allocate: sizeof file + (".esy_rewrite") 12 + ('\0') 1 = 13
+		char filename_stage[sizeof(argv[1]) + 13];
+		char *p = filename_stage;
+		filename_stage[0] = '\0';
+		p = mystrcat(filename_stage, argv[1]);
+		p = mystrcat(filename_stage, ".esy_rewrite");
 
-			// filestat = os.stat(filename)
-			struct stat fileStat;
-			if(stat(argv[1], &fileStat) < 0)    
-        exit(1);
-			
-			// # TODO: we probably should handle symlinks too in a special way,
-			// # to modify their location to a rewritten path
-			
-			// with open(filename, 'r') as input_file:
-			//     data = input_file.read()
-			char *original = readFilee(argv[1]);
+		// filestat = os.stat(filename)
+		struct stat fileStat;
+		if(stat(argv[1], &fileStat) < 0){
+			exit(1);
+		}
 
-			// data = data.replace(src, dest)
-			
+		// # TODO: we probably should handle symlinks too in a special way,
+		// # to modify their location to a rewritten path
 
-			// with open(filename_stage, 'w') as output_file:
-			//     output_file.write(data)
-			FILE *out = fopen(filename_stage, "w");
-			fprintf(out,"%s", repl_str(original, argv[2], argv[3]));
+		// with open(filename, 'r') as input_file:
+		//     data = input_file.read()
+		/*
+			http://stackoverflow.com/questions/19260209/ftell-returning-incorrect-value
+			"You should get in a habit of always doing this, since only binary mode has well-defined behavior in standard C.
+			On POSIX systems, binary and text (default) mode behave the same,
+			but on windows, munging of newlines takes place in a way that messes up file contents and offsets."
+		*/
+		FILE *in = fopen(argv[1], "rb");
+		if(in == NULL) {
+			fprintf(stderr, "Could not open file: %s", argv[1]);
+			exit(1);
+		}
+		char original[fileStat.st_size + 1];
+		size_t len = fread(original, 1, fileStat.st_size, in);
+		// fread(...) does not zero-terminate a 'string''
+		original[len] = '\0';
 
-			// os.rename(filename_stage, filename)
-			rename(filename_stage, argv[1]);
-			// os.chmod(filename, stat.S_IMODE(filestat.st_mode))
-			chmod(argv[1], fileStat.st_mode);
+		// data = data.replace(src, dest)
+		char *data = repl_str(original, argv[2], argv[3]);
+		if(data == NULL){
+			fprintf(stderr, "Could not replace the `src` string with the `dest` string");
+			exit(1);
+		}
 
-			// componentWillUnmount stuff
-			fclose(out);
-			free(filename_stage);
-			free(original);
+		// with open(filename_stage, 'w') as output_file:
+		//     output_file.write(data)
+		FILE *out = fopen(filename_stage, "w");
+		if(out == NULL) {
+			fprintf(stderr, "Could not open file: %s", filename_stage);
+			exit(1);
+		}
+		fprintf(out,"%s", data);
 
-			return 0;
+		// os.rename(filename_stage, filename)
+		rename(filename_stage, argv[1]);
+		// os.chmod(filename, stat.S_IMODE(filestat.st_mode))
+		chmod(argv[1], fileStat.st_mode);
+
+		// componentWillUnmount stuff
+		fclose(in);
+		fclose(out);
+
+		return 0;
     }
 }
