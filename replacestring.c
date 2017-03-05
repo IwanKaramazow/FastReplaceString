@@ -162,15 +162,16 @@ wchar_t *conv_mbtowcs(const char *src) {
 int main(int argc, char **argv){
 	// filename, src, dest = sys.argv[1:4]
 
-	FILE *f;
+	FILE *in;
 	FILE *out;
 	char *mystr = NULL;
 	wchar_t *mywstr = NULL;
 	wchar_t *oldw, *neww, *newwstr = NULL;
 	const char *filename, *locale;
 	size_t r;
-	// long i;
 	long int filelen = DEFSTRSIZE;
+	struct stat fileStat;
+
 
 	/* check if amount of args is correct, otherwise exit */
     if (argc <= 3) {
@@ -178,6 +179,10 @@ int main(int argc, char **argv){
 		printusage;
 		exit(EXIT_FAILURE);
     }
+
+	if(stat(argv[1], &fileStat) < 0){
+		exit(1);
+	}
 
 	/* Locale must be set so that mbstowcs() can interpret multibyte chars
 	 * according to that locale. Calling setlocale() with an empty string
@@ -204,12 +209,12 @@ int main(int argc, char **argv){
 	 * not require that a binary stream supports seeking to the end of a
 	 * file. If the seek and tell fail, set the file size to DEFSTRSIZE.
 	 */
-	f = fopen(filename, "rb");
-	if (f == NULL) {
+	in = fopen(filename, "rb");
+	if (in == NULL) {
 		perror("fopen");
 		exit(EXIT_FAILURE);
 	}
-	if (fseek(f, 0, SEEK_END) > 0 || (filelen = ftell(f)) == -1L) {
+	if (fseek(in, 0, SEEK_END) > 0 || (filelen = ftell(in)) == -1L) {
 		filelen = DEFSTRSIZE;
 	}
 
@@ -222,18 +227,18 @@ int main(int argc, char **argv){
 	}
 
 	/* Reopen the specified file in text mode. */
-	if (freopen(filename, "r", f) == NULL) {
+	if (freopen(filename, "r", in) == NULL) {
 		perror("freopen");
 		exit(EXIT_FAILURE);
 	}
 
 	/* Read in as much of specified file as possible */
-	if ((r = fread(mystr, 1, filelen, f)) == 0) {
+	if ((r = fread(mystr, 1, filelen, in)) == 0) {
 		perror("fread");
 		exit(EXIT_FAILURE);
 	}
 	mystr[r] = '\0';
-	if (fclose(f) != 0)
+	if (fclose(in) != 0)
 		perror("fclose");
 
 	/* Convert file contents from multibyte to wide char. */
@@ -258,6 +263,7 @@ int main(int argc, char **argv){
 	fwprintf(out, newwstr);
 
 	rename(filename_stage, argv[1]);
+	chmod(argv[1], fileStat.st_mode);
 	fclose(out);
 
 	/* Free allocated memory and exit with successful result */
