@@ -6,7 +6,6 @@
 #include <string.h>
 #include <limits.h>
 #include <locale.h>
-#include <time.h>
 
 /* Maximum default buffer size */
 #define MAXSTRSIZE 1000000 /* use 1 million bytes max */
@@ -29,18 +28,15 @@
 #endif
 
 #define printusage fprintf(stderr, \
-"This program takes 4 parameters in this order: \n" \
-"filename old_token new_token number_of_iterations\n" \
-"It doesn't write to the file at all.\n" \
-"The file's encoding is treated according to your locale " \
-"i.e. in a Linux/UNIX environment, the LC_CTYPE or LC_ALL environment " \
-"variables. For UTF-8 encoding, one possibility is to set " \
-"LC_ALL to \"en_AU.UTF-8\".\n");
+"This program takes 3 parameters in this order: \n" \
+"filename src dest\n" \
+"It overwrites the `src` with `dest` in that file.\n");
 
 #if (__STDC_VERSION__ >= 199901L)
 #include <stdint.h>
 #endif
 
+/* Source: http://creativeandcritical.net/downloads/wreplacebench.c */
 wchar_t *repl_wcs(const wchar_t *str, const wchar_t *from, const wchar_t *to) {
 
 	/* Adjust each of the below values to suit your needs. */
@@ -160,8 +156,6 @@ wchar_t *conv_mbtowcs(const char *src) {
 }
 
 int main(int argc, char **argv){
-	// filename, src, dest = sys.argv[1:4]
-
 	FILE *in;
 	FILE *out;
 	char *mystr = NULL;
@@ -172,17 +166,12 @@ int main(int argc, char **argv){
 	long int filelen = DEFSTRSIZE;
 	struct stat fileStat;
 
-
 	/* check if amount of args is correct, otherwise exit */
     if (argc <= 3) {
 		fprintf(stderr, "Not enough parameters.\n");
 		printusage;
 		exit(EXIT_FAILURE);
     }
-
-	if(stat(argv[1], &fileStat) < 0){
-		exit(1);
-	}
 
 	/* Locale must be set so that mbstowcs() can interpret multibyte chars
 	 * according to that locale. Calling setlocale() with an empty string
@@ -202,6 +191,10 @@ int main(int argc, char **argv){
 	neww = conv_mbtowcs(argv[3]);
 	if (!neww)
 		exit(EXIT_FAILURE);
+
+	if(stat(filename, &fileStat) < 0){
+		exit(1);
+	}
 
 	/* Try to determine the specified file's size so we know how much memory
 	 * to malloc. Note firstly that this requires opening the file in binary
@@ -249,25 +242,30 @@ int main(int argc, char **argv){
 	/* Free no-longer-required memory for mystr. */
 	free(mystr);
 
-	free(newwstr);
 	if ((newwstr = repl_wcs(mywstr, oldw, neww)) == NULL)
-		fwprintf(stderr, L"stringreplace returned NULL.\n");
+	fwprintf(stderr, L"Replace returned NULL.\n");
 
-	char filename_stage[strlen(argv[1]) + 13];
-	char *p = filename_stage;
-	filename_stage[0] = '\0';
-	p = mystrcat(filename_stage, argv[1]);
-	p = mystrcat(filename_stage, ".esy_rewrite");
+	if (newwstr != NULL) {
+		char filename_stage[strlen(argv[1]) + 9];
+		char *p = filename_stage;
+		filename_stage[0] = '\0';
+		p = mystrcat(filename_stage, argv[1]);
+		p = mystrcat(filename_stage, ".rewrite");
 
-	out = fopen(filename_stage, "w");
-	fwprintf(out, newwstr);
+		out = fopen(filename_stage, "w");
+		fwprintf(out, newwstr);
 
-	rename(filename_stage, argv[1]);
-	chmod(argv[1], fileStat.st_mode);
-	fclose(out);
+		rename(filename_stage, argv[1]);
+		chmod(argv[1], fileStat.st_mode);
+		fclose(out);
+	}
 
-	/* Free allocated memory and exit with successful result */
+	/* Free allocated memory */
+	/* componentWillUnmount stuff */
+	free(oldw);
+	free(neww);
 	free(newwstr);
 	free(mywstr);
+
 	return 0;
 }
