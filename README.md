@@ -1,5 +1,6 @@
 # FastReplaceString
-Fast native implementation in c of a replace string script as an npm package. Replaces a string in a file.
+Fast native implementation in c of a replace string script as an npm package.
+Replaces a (wide) string in a file.
 
 ## Usage
 ```
@@ -13,10 +14,13 @@ replacestring filename src dest
 ## Example:
 
 ```
-echo "let () = print_endline \"Hello world\";" > hello.re
+echo "let () = print_endline \"Hello world🌍\";" > hello.re
 
-replacestring hello.re world universe
+replacestring hello.re world🌍 universe⛄️
 
 cat hello.re
- >>> let () = print_endline "Hello universe";
+ >>> let () = print_endline "Hello universe⛄️";
 ```
+
+## Acknowledgements
+The core replace algorithm - the heavy lifting - has been adopted from http://creativeandcritical.net/downloads/wreplacebench.c, written by Laird Shaw contactable @ http://creativeandcritical.net/contact.
