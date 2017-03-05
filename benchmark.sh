@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
+LINES=10000
 if [ ! -f test/small.txt ]; then
-    yes "let () = print_endline \"Hey, qué tal?\";" | head -n 10 > test/small.txt
+    yes "let () = print_endline \"Hey, qué tal?\";" | head -n $LINES > test/small.txt
 fi
 
 if [ ! -f test/file100mb.txt ]; then
@@ -22,7 +23,7 @@ cp test/file100mb.txt test/file100mbc.txt
 cp test/file100mb.txt test/file100mbpython.txt
 
 echo "========================"
-echo "small file benchmark: "
+echo "small file ("$LINES" lines) benchmark: "
 echo "c implementation:"
 time ./.bin/replacestring test/smallc.txt Hey Hola
 echo "python implementation:"
@@ -30,14 +31,14 @@ time python ./test/replacestring.py test/smallpython.txt Hey Hola
 echo "========================"
 
 echo "========================"
-echo "10mb file benchmark: "
+echo "10mb random base64 file benchmark: "
 echo "c implementation:"
 time ./.bin/replacestring test/file10mbc.txt a b
 echo "python implementation:"
 time python ./test/replacestring.py test/file10mbpython.txt a b
 echo "========================"
 
-echo "100mb file benchmark: "
+echo "100mb random base64 file benchmark: "
 echo "c implementation:"
 time ./.bin/replacestring test/file100mbc.txt a b
 echo "python implementation:"
