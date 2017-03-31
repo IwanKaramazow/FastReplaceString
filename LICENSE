@@ -19,15 +19,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
-
-Most code is adopted from http://creativeandcritical.net/downloads/wreplacebench.c.
- * Compiled/authored by: Laird Shaw
- * Contact at          : http://creativeandcritical.net/contact
- *
- * COPYRIGHT
- *
- * I release into the public domain all of the code in this file; no copying
- * restrictions apply. You are free to attribute it to me (Laird Shaw
- * contactable @ http://creativeandcritical.net/contact) or not, as you see fit
- * - all that I ask is that you don't attribute it to yourself or anyone else.

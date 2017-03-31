@@ -4,11 +4,10 @@
   "description": "Fast C native replacement of a string in a file. Low startup time makes this great for build scripts.",
   "main": "index.js",
   "scripts": {
-    "postinstall": "gcc -o ./.bin/replacestring -x c ./replacestring.c",
-    "replacestring": "./.bin/replacestring",
-    "infer": "infer -- gcc -o ./.bin/replacestring -x c ./replacestring.c",
-    "build": "gcc -o ./.bin/replacestring -x c ./replacestring.c",
-    "clean": "rm -rf ./.bin && mkdir ./.bin",
+    "postinstall": "gcc -o ./.bin/fastreplacestring -x c ./fastreplacestring.c",
+    "frs": "./.bin/fastreplacestring",
+    "infer": "infer -- gcc -o ./.bin/fastreplacestring -x c ./fastreplacestring.c",
+    "build": "gcc -o ./.bin/fastreplacestring -x c ./fastreplacestring.c",
     "test": "echo \"No test\""
   },
   "repository": {
@@ -16,14 +15,14 @@
     "url": "git+https://github.com/IwanKaramazow/FastReplaceString.git"
   },
   "bin": {
-    "replacestring": "./.bin/replacestring"
+    "fastreplacestring": "./.bin/fastreplacestring"
   },
   "keywords": [
-    "replacestring"
+    "replacestring", "fastreplacestring", "c", "native"
   ],
   "exportedEnvVars": {
     "PATH": {
-      "val": "./bin",
+      "val": "./.bin",
       "resolveAsRelativePath": true,
       "global": true,
       "globalCollisionBehavior": "joinPath"
