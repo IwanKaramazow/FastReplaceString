@@ -48,6 +48,12 @@ int indexOf(const char *needle, size_t needleLen, const char *haystack, size_t h
 int main(int arg, char **argv) {
   FILE *in, *out;
   char *s = NULL;
+  size_t cacheSize = 0;
+  size_t cacheSizeInc = 16;
+  const size_t cacheIncFactor = 3;
+  const size_t cacheIncMax = 1048576;
+  int *indexCacheTmp, *indexCache = NULL;
+  // indexCache = malloc(cacheSize);
   size_t r, filelen, newFilelen;
   struct stat fileStat;
   const char* filename;
@@ -85,6 +91,7 @@ int main(int arg, char **argv) {
   // If there isn't anything to read, finish succesfully :)
   if ((r = fread(s, 1, filelen, in)) == 0) {
     free(s);
+    free(indexCache);
     fclose(in);
     return 0;
   }
@@ -102,12 +109,30 @@ int main(int arg, char **argv) {
   test = s;
   int j, start, c = 0;
   int index;
-  int cache[100];
+
   while((index = indexOf(old, oldLen, test + start, filelen - start)) != -1) {
     c++;
+    if (cacheSize  < c) {
+      cacheSize += cacheSizeInc;
+      indexCacheTmp = realloc(indexCache, sizeof(*indexCache) * cacheSize);
+      if (indexCacheTmp == NULL) {
+        printf("%s\n", "fastreplacestring.c: couldn't allocate a new cache");
+        exit(1);
+      } else {
+        indexCache = indexCacheTmp;
+      }
+      cacheSizeInc *= cacheIncFactor;
+      if (cacheSizeInc > cacheIncMax) {
+				cacheSizeInc = cacheIncMax;
+			}
+    }
     j = start;
     j += index;
-    cache[c - 1] = j;
+    if(indexCache == NULL) {
+      printf("%s\n", "fastreplacestring.c: NULL DEREFERENCE of indexCache");
+      exit(1);
+    }
+    indexCache[c - 1] = j;
     start = j + oldLen;
   }
 
@@ -131,7 +156,7 @@ int main(int arg, char **argv) {
     }
     // replace the bytes
     for(i = 0; i < c; i++) {
-      j = cache[i];
+      j = indexCache[i];
       memcpy(temp, pstr, j - start);
       temp += j - start;
       pstr = s + j + oldLen;
