@@ -1,6 +1,6 @@
 # FastReplaceString
 Fast native implementation in c of a replace string script as an npm package.
-Replaces a (wide) string in a file.
+Replaces a string in a file. (supports Unicode)
 
 ## Usage
 ```
@@ -16,8 +16,23 @@ fastreplacestring filename src dest
 ```
 echo "let () = print_endline \"Hello world🌍\";" > hello.re
 
-replacestring hello.re world🌍 universe⛄️
+fastreplacestring hello.re world🌍 universe⛄️
 
 cat hello.re
  >>> let () = print_endline "Hello universe⛄️";
 ```
+
+## Tests:
+
+```
+npm run test
+# node ./tests/test.js
+```
+
+## How to contribute:
+* clone the repo
+* add a new file under `./tests/input/yourFileName`
+* add the expected file under `./tests/expected/yourFileName`
+* add a command in `./tests/commands` of form `filename src dest`, e.g. `./tests/input/yourFileName aString aReplacement`
+* make changes to `fastreplacestring.c` & `npm run build`
+* `npm run test`

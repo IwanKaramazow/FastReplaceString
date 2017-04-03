@@ -1,13 +1,12 @@
-language: node_js
+language: node_js 
 os:
   - linux
   - osx
+compiler:
+  - gcc
 node_js:
   - "6"
   - "6.1"
   - "5.11"
 install:
-  - npm run build
   - npm install -g .
-script:
-  - ./tests/test.sh

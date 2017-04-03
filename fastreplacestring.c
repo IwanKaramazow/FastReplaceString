@@ -45,7 +45,7 @@ int indexOf(const char *needle, size_t needleLen, const char *haystack, size_t h
   return -1;
 }
 
-int main(int arg, char **argv) {
+int main(int argc, char **argv) {
   FILE *in, *out;
   char *s = NULL;
   size_t cacheSize = 0;
@@ -60,9 +60,9 @@ int main(int arg, char **argv) {
   const char* old;
   const char* new;
 
-  filename = argv[1];
-  old = argv[2];
-  new = argv[3];
+  filename = argv[argc - 3];
+  old = argv[argc - 2];
+  new = argv[argc - 1];
 
   // concat filename with ".rewrite" (temp file name)
   char filename_stage[strlen(argv[1]) + 9];

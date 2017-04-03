@@ -8,7 +8,7 @@
     "frs": "./.bin/fastreplacestring",
     "infer": "infer -- gcc -o ./.bin/fastreplacestring -x c ./fastreplacestring.c",
     "build": "gcc -o ./.bin/fastreplacestring -x c ./fastreplacestring.c",
-    "test": "echo \"No test\""
+    "test": "node ./tests/test.js"
   },
   "repository": {
     "type": "git",
