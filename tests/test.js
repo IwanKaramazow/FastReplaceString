@@ -34,30 +34,19 @@ function testCommand(command) {
     var src = tokens[1];
     var dest = tokens[2];
     var actualFile = file.replace("input", "actual");
-    console.log("cp " + file + " " + actualFile);
-    cp.execSync("cp " + file + " " + actualFile);
-    cp.execSync("cp " + actualFile + " " + actualFile + ".reformatted");
-    cp.execSync(
-      "./.bin/fastreplacestring \"" 
-      + actualFile 
-      + "\" \"" + src + "\" \"" + dest + "\""  
-    );
-    cp.execSync(
-      "./.bin/fastreplacestring \"" +
-        actualFile +
-        ".reformatted\"" +
-        " \"" +
-        dest +
-        "\" \"" +
-        src + "\""
-    );
+    var reformattedFile = actualFile + ".reformatted";
+    cp.spawnSync("cp", [file, actualFile]);
+    cp.spawnSync("fastreplacestring", [actualFile, src, dest]);
+    cp.spawnSync("cp", [actualFile, reformattedFile]);
+    cp.spawnSync("fastreplacestring", [reformattedFile, dest, src]);
+
     var result = fs.readFileSync(actualFile);
     var expected = fs.readFileSync(file.replace("input", "expected"));
 
     var originalSha = sha1sum(fs.readFileSync(file));
     var resultSha = sha1sum(result);
     var expectedSha = sha1sum(expected);
-    var reformattedSha = sha1sum(fs.readFileSync(actualFile + ".reformatted"));
+    var reformattedSha = sha1sum(fs.readFileSync(reformattedFile));
 
     console.log(">>> fastreplacestring " + command);
     if (resultSha === expectedSha) {
@@ -75,14 +64,14 @@ function testCommand(command) {
     }
     console.log("");
   } catch (error) {
-//    console.log(error, " something went wrong, but ignore it!");
+    console.log(error);
   }
 }
 
 commands.forEach(testCommand);
 
-if (!success) {
-  process.exit(1);
-} else {
+if(success) {
   process.exit(0);
+} else {
+  process.exit(1);
 }

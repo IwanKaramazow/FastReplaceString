@@ -48,12 +48,8 @@ int indexOf(const char *needle, size_t needleLen, const char *haystack, size_t h
 int main(int argc, char **argv) {
   FILE *in, *out;
   char *s = NULL;
-  size_t cacheSize = 0;
-  size_t cacheSizeInc = 16;
-  const size_t cacheIncFactor = 3;
-  const size_t cacheIncMax = 1048576;
-  int *indexCacheTmp, *indexCache = NULL;
-  // indexCache = malloc(cacheSize);
+  // TODO: figure out how to dynamically grow this when needed without random segfaults
+  int *indexCache = malloc(100);
   size_t r, filelen, newFilelen;
   struct stat fileStat;
   const char* filename;
@@ -112,20 +108,6 @@ int main(int argc, char **argv) {
 
   while((index = indexOf(old, oldLen, test + start, filelen - start)) != -1) {
     c++;
-    if (cacheSize  < c) {
-      cacheSize += cacheSizeInc;
-      indexCacheTmp = realloc(indexCache, sizeof(*indexCache) * cacheSize);
-      if (indexCacheTmp == NULL) {
-        printf("%s\n", "fastreplacestring.c: couldn't allocate a new cache");
-        exit(1);
-      } else {
-        indexCache = indexCacheTmp;
-      }
-      cacheSizeInc *= cacheIncFactor;
-      if (cacheSizeInc > cacheIncMax) {
-				cacheSizeInc = cacheIncMax;
-			}
-    }
     j = start;
     j += index;
     if(indexCache == NULL) {
