@@ -1,12 +1,12 @@
 version: '1.0'
 steps:
-  build:
-    title: Build Docker 
+  build_step:
+    title: Build Docker Ubuntu Image 
     type: build 
     image_name: iwankaramazow/fastreplacestring
     dockerfile: Dockerfile
 
-  tests:
+  unit_tests:
     image: ${{build_step}}
     working_directory: IMAGE_WORK_DIR
     commands:
