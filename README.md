@@ -6,7 +6,8 @@ Replaces a string in a file. (supports Unicode)
 
 | Platform  | Status   |
 | --------- | ---------|
-| MacOS     | [![Build Status](https://travis-ci.org/IwanKaramazow/FastReplaceString.svg?branch=master)](https://travis-ci.org/IwanKaramazow/FastReplaceString) |
+| Linux | [![Build Status](https://travis-ci.org/IwanKaramazow/FastReplaceString.svg?branch=master)](https://travis-ci.org/IwanKaramazow/FastReplaceString) |
+| MacOS | [![Build Status](https://travis-ci.org/IwanKaramazow/FastReplaceString.svg?branch=master)](https://travis-ci.org/IwanKaramazow/FastReplaceString) |
 
 ## Usage
 ```
