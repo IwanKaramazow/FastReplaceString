@@ -1,0 +1,11 @@
+version: '1.0'
+steps:
+  TestFastReplaceStringLinux:
+    title: Build Docker + test fastreplacestring 
+    type: build 
+    image_name: iwankaramazow/fastreplacestring
+    working_directory: ./
+    dockerfile: Dockerfile
+  commands:
+    - npm run test
+
