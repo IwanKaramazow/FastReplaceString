@@ -2,6 +2,12 @@
 Fast native implementation in c of a replace string script as an npm package.
 Replaces a string in a file. (supports Unicode)
 
+## Build status
+
+| Platform  | Status   |
+| --------- | ---------|
+| MacOS     | [![Build Status](https://travis-ci.org/IwanKaramazow/FastReplaceString.svg?branch=master)](https://travis-ci.org/IwanKaramazow/FastReplaceString) |
+
 ## Usage
 ```
 fastreplacestring filename src dest
