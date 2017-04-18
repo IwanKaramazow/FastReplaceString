@@ -6,7 +6,7 @@ Replaces a string in a file. (supports Unicode)
 
 | Platform  | Status   |
 | --------- | ---------|
-| Linux | [![Build Status](https://travis-ci.org/IwanKaramazow/FastReplaceString.svg?branch=master)](https://travis-ci.org/IwanKaramazow/FastReplaceString) |
+| Linux | [![Build status]( https://g.codefresh.io/api/badges/build?repoOwner=IwanKaramazow&repoName=FastReplaceString&branch=master&pipelineName=FastReplaceString&accountName=IwanKaramazow&type=cf-2)]( https://g.codefresh.io/repositories/IwanKaramazow/FastReplaceString/builds?filter=trigger:build;branch:master;service:58f675e124f7b201009db80c~FastReplaceString) |
 | MacOS | [![Build Status](https://travis-ci.org/IwanKaramazow/FastReplaceString.svg?branch=master)](https://travis-ci.org/IwanKaramazow/FastReplaceString) |
 
 ## Usage
