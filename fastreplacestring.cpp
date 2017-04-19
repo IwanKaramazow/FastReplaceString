@@ -57,8 +57,6 @@ int main(int argc, char **argv) {
   old = argv[argc - 2];
   newWord = argv[argc - 1];
 
-  printf("%s", old);
-
   // concat filename with ".rewrite" (temp file name)
   string filename_stage = argv[1];
   filename_stage.append(".rewrite");
