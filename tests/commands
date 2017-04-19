@@ -4,5 +4,4 @@
 ./tests/input/shorten rank-2 Mac
 ./tests/input/lengthen OCaml Reason
 ./tests/input/emoji 🌈  ✅
-./tests/input/chinese 樹 房子 
 ./tests/input/ocamlopt Iwan Jordan
