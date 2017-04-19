@@ -23,7 +23,7 @@ fastreplacestring filename src dest
 ```
 echo "let () = print_endline \"Hello world🌍\";" > hello.re
 
-fastreplacestring hello.re world🌍 universe⛄️
+fastreplacestring.exe hello.re world🌍 universe⛄️
 
 cat hello.re
  >>> let () = print_endline "Hello universe⛄️";
