@@ -1,9 +1,8 @@
+#include <cstdio>
 #include <iostream>
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <string>
-#include <sys/stat.h>
 #include <vector>
 using namespace std;
 
@@ -63,23 +62,15 @@ int main(int argc, char **argv) {
     return 1;
   }
 
-  struct stat fileStat;
-  if (stat(filename.c_str(), &fileStat) < 0) {
-    cout << "Fatal error: Couldn't access " + filename;
-    return 1;
-  }
-
   char *s = NULL;
   vector<int> indexCache;
   size_t r, newFilelen;
 
-  // concat filename with ".rewrite" (temp file name)
-  string filename_stage = argv[1];
-  filename_stage.append(".rewrite");
-
   // read filelen given by fileState
   // alternatively this could be determined with fseek && ftell
-  size_t filelen = fileStat.st_size;
+  fseek(in, 0, SEEK_END);
+  size_t filelen = ftell(in);
+  fseek(in, 0, SEEK_SET);
 
   if ((s = (char *)malloc(filelen)) == NULL) {
     printf("malloc s filelen problem \n");
@@ -93,8 +84,6 @@ int main(int argc, char **argv) {
     fclose(in);
     return 0;
   }
-
-  fclose(in);
 
   char *t = NULL;
   char *temp = NULL;
@@ -146,16 +135,16 @@ int main(int argc, char **argv) {
     }
     memcpy(temp, pstr, filelen - j);
 
-    // write the result to a temp file
-    FILE *out = fopen(filename_stage.c_str(), "wb");
-    fwrite(t, 1, newFilelen, out);
-
-    // rename temp file to the original file & copy permissions
-    rename(filename_stage.c_str(), filename.c_str());
-    chmod(filename.c_str(), fileStat.st_mode);
-
-    fclose(out);
     free(s);
+
+    // write the result to a temp file
+    // wb mode opens the file for writing and makes it empty
+    freopen(filename.c_str(), "wb", in);
+    if (in == NULL) {
+      cout << filename + " cannot be written to.\n";
+      return 1;
+    }
+    fwrite(t, 1, newFilelen, in);
   }
 
   return 0;
