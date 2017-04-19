@@ -1,3 +1,4 @@
+#include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -44,33 +45,41 @@ int indexOf(const char *needle, size_t needleLen, const char *haystack,
 }
 
 int main(int argc, char **argv) {
-  FILE *in, *out;
+  if (argc != 4) {
+    cout << "usage: fastreplacestring <filename> <term> <replacement>\n";
+    return 1;
+  }
+
+  string filename = argv[argc - 3];
+  const char *old = argv[argc - 2];
+  const char *newWord = argv[argc - 1];
+  FILE *in = fopen(filename.c_str(), "rb");
+
+  // Check if file exists and can is read-write
+  // This is actually a shortcut because fopen might fail for a number of
+  // reasons
+  if (in == NULL) {
+    cout << filename + " doesn't exist\n";
+    return 1;
+  }
+
+  struct stat fileStat;
+  if (stat(filename.c_str(), &fileStat) < 0) {
+    cout << "Fatal error: Couldn't access " + filename;
+    return 1;
+  }
+
   char *s = NULL;
   vector<int> indexCache;
-  size_t r, filelen, newFilelen;
-  struct stat fileStat;
-  const char *filename;
-  const char *old;
-  const char *newWord;
-
-  filename = argv[argc - 3];
-  old = argv[argc - 2];
-  newWord = argv[argc - 1];
+  size_t r, newFilelen;
 
   // concat filename with ".rewrite" (temp file name)
   string filename_stage = argv[1];
   filename_stage.append(".rewrite");
 
-  if (stat(filename, &fileStat) < 0) {
-    printf("stat problem \n");
-    exit(1);
-  }
-
   // read filelen given by fileState
   // alternatively this could be determined with fseek && ftell
-  filelen = fileStat.st_size;
-
-  in = fopen(filename, "rb");
+  size_t filelen = fileStat.st_size;
 
   if ((s = (char *)malloc(filelen)) == NULL) {
     printf("malloc s filelen problem \n");
@@ -138,12 +147,12 @@ int main(int argc, char **argv) {
     memcpy(temp, pstr, filelen - j);
 
     // write the result to a temp file
-    out = fopen(filename_stage.c_str(), "wb");
+    FILE *out = fopen(filename_stage.c_str(), "wb");
     fwrite(t, 1, newFilelen, out);
 
     // rename temp file to the original file & copy permissions
-    rename(filename_stage.c_str(), filename);
-    chmod(filename, fileStat.st_mode);
+    rename(filename_stage.c_str(), filename.c_str());
+    chmod(filename.c_str(), fileStat.st_mode);
 
     fclose(out);
     free(s);
