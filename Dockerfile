@@ -16,6 +16,6 @@ COPY . /out
 
 WORKDIR /out
 
-RUN npm install -g .
+RUN npm run build 
 
 CMD ["/bin/bash"]
