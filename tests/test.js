@@ -36,9 +36,9 @@ function testCommand(command) {
     var actualFile = file.replace("input", "actual");
     var reformattedFile = actualFile + ".reformatted";
     cp.spawnSync("cp", [file, actualFile]);
-    cp.spawnSync("fastreplacestring", [actualFile, src, dest]);
+    cp.spawnSync("fastreplacestring.exe", [actualFile, src, dest]);
     cp.spawnSync("cp", [actualFile, reformattedFile]);
-    cp.spawnSync("fastreplacestring", [reformattedFile, dest, src]);
+    cp.spawnSync("fastreplacestring.exe", [reformattedFile, dest, src]);
 
     var result = fs.readFileSync(actualFile);
     var expected = fs.readFileSync(file.replace("input", "expected"));
@@ -48,7 +48,7 @@ function testCommand(command) {
     var expectedSha = sha1sum(expected);
     var reformattedSha = sha1sum(fs.readFileSync(reformattedFile));
 
-    console.log(">>> fastreplacestring " + command);
+    console.log(">>> fastreplacestring.exe " + command);
     if (resultSha === expectedSha) {
       console.log("🌈   Test passed");
     } else {

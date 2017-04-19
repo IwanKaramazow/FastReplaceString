@@ -4,10 +4,10 @@
   "description": "Fast C native replacement of a string in a file. Low startup time makes this great for build scripts.",
   "main": "index.js",
   "scripts": {
-    "postinstall": "gcc -o ./.bin/fastreplacestring -x c ./fastreplacestring.c",
-    "frs": "./.bin/fastreplacestring",
-    "infer": "infer -- gcc -o ./.bin/fastreplacestring -x c ./fastreplacestring.c",
-    "build": "gcc -o ./.bin/fastreplacestring -x c ./fastreplacestring.c",
+    "postinstall": "gcc -o ./.bin/fastreplacestring.exe -x c ./fastreplacestring.c",
+    "frs": "./.bin/fastreplacestring.exe",
+    "infer": "infer -- gcc -o ./.bin/fastreplacestring.exe -x c ./fastreplacestring.c",
+    "build": "gcc -o ./.bin/fastreplacestring.exe -x c ./fastreplacestring.c",
     "test": "node ./tests/test.js"
   },
   "repository": {
@@ -15,7 +15,7 @@
     "url": "git+https://github.com/IwanKaramazow/FastReplaceString.git"
   },
   "bin": {
-    "fastreplacestring": "./.bin/fastreplacestring"
+    "fastreplacestring.exe": "./.bin/fastreplacestring.exe"
   },
   "keywords": [
     "replacestring", "fastreplacestring", "c", "native"
