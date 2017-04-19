@@ -36,9 +36,9 @@ function testCommand(command) {
     var actualFile = file.replace("input", "actual");
     var reformattedFile = actualFile + ".reformatted";
     cp.spawnSync("cp", [file, actualFile]);
-    cp.spawnSync("fastreplacestring.exe", [actualFile, src, dest]);
+    cp.spawnSync("./.bin/fastreplacestring", [actualFile, src, dest]);
     cp.spawnSync("cp", [actualFile, reformattedFile]);
-    cp.spawnSync("fastreplacestring.exe", [reformattedFile, dest, src]);
+    cp.spawnSync("./.bin/fastreplacestring", [reformattedFile, dest, src]);
 
     var result = fs.readFileSync(actualFile);
     var expected = fs.readFileSync(file.replace("input", "expected"));
