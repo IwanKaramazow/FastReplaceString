@@ -2,7 +2,7 @@ FROM ubuntu:12.04
 MAINTAINER Iwan Karamazow
 
 RUN apt-get update
-RUN apt-get install -y git wget xz-utils gcc
+RUN apt-get install -y git wget xz-utils g++
 
 ENV NODE_VERSION 4.0.0
 
@@ -16,6 +16,6 @@ COPY . /out
 
 WORKDIR /out
 
-RUN npm install -g .
+RUN npm run build 
 
 CMD ["/bin/bash"]
