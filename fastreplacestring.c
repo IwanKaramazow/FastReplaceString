@@ -2,15 +2,11 @@
 #include <stdio.h>
 #include <sys/stat.h>
 #include <string.h>
+#include <string>
+#include <vector>
+using namespace std;
 
 #define REHASH(a, b, h) ((((h) - (a)*d) << 1) + (b))
-
-// source: https://www.joelonsoftware.com/2001/12/11/back-to-basics/
-char* scat( char* dest, char* src ) {
-  while ((*dest)) dest++;
-  while ((*dest++ = *src++));
-  return --dest;
-}
 
 // Rabin-Karp search (modified from: http://www-igm.univ-mlv.fr/~lecroq/string/node5.html#SECTION0050)
 int indexOf(const char *needle, size_t needleLen, const char *haystack, size_t haystackLen) {
@@ -48,24 +44,20 @@ int indexOf(const char *needle, size_t needleLen, const char *haystack, size_t h
 int main(int argc, char **argv) {
   FILE *in, *out;
   char *s = NULL;
-  // TODO: figure out how to dynamically grow this when needed without random segfaults
-  int *indexCache = malloc(100);
+  vector<int> indexCache;
   size_t r, filelen, newFilelen;
   struct stat fileStat;
-  const char* filename;
-  const char* old;
-  const char* new;
+  const char *filename;
+  const char *old;
+  const char *newWord;
 
   filename = argv[argc - 3];
   old = argv[argc - 2];
-  new = argv[argc - 1];
+  newWord = argv[argc - 1];
 
   // concat filename with ".rewrite" (temp file name)
-  char filename_stage[strlen(argv[1]) + 9];
-  char *p = filename_stage;
-  filename_stage[0] = '\0';
-  p = scat(filename_stage, argv[1]);
-  p = scat(filename_stage, ".rewrite");
+  string filename_stage = argv[1];
+  filename_stage.append(".rewrite");
 
   if(stat(filename, &fileStat) < 0){
     printf("stat problem \n");
@@ -78,7 +70,7 @@ int main(int argc, char **argv) {
 
   in = fopen(filename, "rb");
 
-  if ((s = malloc(filelen)) == NULL) {
+  if ((s = (char *)malloc(filelen)) == NULL) {
     printf("malloc s filelen problem \n");
     exit(1);
   }
@@ -87,7 +79,6 @@ int main(int argc, char **argv) {
   // If there isn't anything to read, finish succesfully :)
   if ((r = fread(s, 1, filelen, in)) == 0) {
     free(s);
-    free(indexCache);
     fclose(in);
     return 0;
   }
@@ -98,23 +89,19 @@ int main(int argc, char **argv) {
   char *temp = NULL;
 
   size_t oldLen = strlen(old);
-  size_t newLen = strlen(new);
+  size_t newLen = strlen(newWord);
 
   /* Find all matches and cache their positions. */
   const char *test = NULL;
   test = s;
-  int j, start, c = 0;
+  int j, start = 0, c = 0;
   int index;
 
   while((index = indexOf(old, oldLen, test + start, filelen - start)) != -1) {
     c++;
     j = start;
     j += index;
-    if(indexCache == NULL) {
-      printf("%s\n", "fastreplacestring.c: NULL DEREFERENCE of indexCache");
-      exit(1);
-    }
-    indexCache[c - 1] = j;
+    indexCache.push_back(j);
     start = j + oldLen;
   }
 
@@ -125,9 +112,9 @@ int main(int argc, char **argv) {
     const char *pstr = s;
     // calculate new file len & allocate memory
     newFilelen = filelen + c * (newLen - oldLen);
-    t = malloc(newFilelen);
+    t = (char *)malloc(newFilelen);
 
-    int i, w = 0;
+    int i = 0;
     j = 0;
     start = 0;
     temp = t;
@@ -142,18 +129,18 @@ int main(int argc, char **argv) {
       memcpy(temp, pstr, j - start);
       temp += j - start;
       pstr = s + j + oldLen;
-      memcpy(temp, new, newLen);
+      memcpy(temp, newWord, newLen);
       temp += newLen;
       start = j + oldLen;
     }
     memcpy(temp, pstr, filelen - j);
 
     // write the result to a temp file
-    out = fopen(filename_stage, "wb");
+    out = fopen(filename_stage.c_str(), "wb");
     fwrite(t, 1, newFilelen, out);
 
     // rename temp file to the original file & copy permissions
-    rename(filename_stage, filename);
+    rename(filename_stage.c_str(), filename);
     chmod(filename, fileStat.st_mode);
 
     fclose(out);
