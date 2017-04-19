@@ -1,18 +1,20 @@
-#include <stdlib.h>
 #include <stdio.h>
-#include <sys/stat.h>
+#include <stdlib.h>
 #include <string.h>
 #include <string>
+#include <sys/stat.h>
 #include <vector>
 using namespace std;
 
 #define REHASH(a, b, h) ((((h) - (a)*d) << 1) + (b))
 
-// Rabin-Karp search (modified from: http://www-igm.univ-mlv.fr/~lecroq/string/node5.html#SECTION0050)
-int indexOf(const char *needle, size_t needleLen, const char *haystack, size_t haystackLen) {
+// Rabin-Karp search (modified from:
+// http://www-igm.univ-mlv.fr/~lecroq/string/node5.html#SECTION0050)
+int indexOf(const char *needle, size_t needleLen, const char *haystack,
+            size_t haystackLen) {
   if (needleLen == 0) {
     return 0;
-  } else if(needleLen > haystackLen) {
+  } else if (needleLen > haystackLen) {
     return -1;
   }
 
@@ -21,16 +23,16 @@ int indexOf(const char *needle, size_t needleLen, const char *haystack, size_t h
   /* computes d = 2^(m-1) with
     the left-shift operator */
   for (d = i = 1; i < needleLen; ++i)
-    d = (d<<1);
+    d = (d << 1);
 
   for (hy = hx = i = 0; i < needleLen; ++i) {
-    hx = ((hx<<1) + needle[i]);
-    hy = ((hy<<1) + haystack[i]);
+    hx = ((hx << 1) + needle[i]);
+    hy = ((hy << 1) + haystack[i]);
   }
 
-   /* Searching */
+  /* Searching */
   j = 0;
-  while (j <= haystackLen-needleLen) {
+  while (j <= haystackLen - needleLen) {
     if (hx == hy && memcmp(needle, haystack + j, needleLen) == 0) {
       return j;
     }
@@ -55,11 +57,13 @@ int main(int argc, char **argv) {
   old = argv[argc - 2];
   newWord = argv[argc - 1];
 
+  printf("%s", old);
+
   // concat filename with ".rewrite" (temp file name)
   string filename_stage = argv[1];
   filename_stage.append(".rewrite");
 
-  if(stat(filename, &fileStat) < 0){
+  if (stat(filename, &fileStat) < 0) {
     printf("stat problem \n");
     exit(1);
   }
@@ -97,7 +101,7 @@ int main(int argc, char **argv) {
   int j, start = 0, c = 0;
   int index;
 
-  while((index = indexOf(old, oldLen, test + start, filelen - start)) != -1) {
+  while ((index = indexOf(old, oldLen, test + start, filelen - start)) != -1) {
     c++;
     j = start;
     j += index;
@@ -119,12 +123,12 @@ int main(int argc, char **argv) {
     start = 0;
     temp = t;
 
-    if(temp == NULL) {
-        free(s);
-        exit(1);
+    if (temp == NULL) {
+      free(s);
+      exit(1);
     }
     // replace the bytes
-    for(i = 0; i < c; i++) {
+    for (i = 0; i < c; i++) {
       j = indexCache[i];
       memcpy(temp, pstr, j - start);
       temp += j - start;
