@@ -12,7 +12,7 @@ Replaces a string in a file. (supports Unicode)
 
 ## Usage
 ```
-fastreplacestring filename src dest
+fastreplacestring.exe filename src dest
 ```
 * filename: filename to read
 * src: string that will be replaced
