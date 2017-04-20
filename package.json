@@ -1,13 +1,13 @@
 {
   "name": "fastreplacestring",
-  "version": "0.0.1",
-  "description": "Fast C native replacement of a string in a file. Low startup time makes this great for build scripts.",
+  "version": "0.0.3",
+  "description": "Fast C(++) native replacement of a string in a file. Low startup time makes this great for build scripts.",
   "main": "index.js",
   "scripts": {
-    "postinstall": "g++ -o ./.bin/fastreplacestring.exe ./fastreplacestring.cpp",
+    "postinstall": "g++ -Ofast -o ./.bin/fastreplacestring.exe ./fastreplacestring.cpp",
     "frs": "./.bin/fastreplacestring.exe",
-    "infer": "infer -- g++ -o ./.bin/fastreplacestring.exe ./fastreplacestring.cpp",
-    "build": "g++ -o ./.bin/fastreplacestring.exe ./fastreplacestring.cpp",
+    "infer": "infer -- g++ -g -o ./.bin/fastreplacestring.exe ./fastreplacestring.cpp",
+    "build": "g++ -Ofast -o ./.bin/fastreplacestring.exe ./fastreplacestring.cpp",
     "test": "node ./tests/test.js"
   },
   "repository": {
