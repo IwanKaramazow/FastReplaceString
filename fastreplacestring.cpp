@@ -133,7 +133,7 @@ int main(int argc, char **argv) {
       temp += newLen;
       start = j + oldLen;
     }
-    memcpy(temp, pstr, filelen - j);
+    memcpy(temp, pstr, filelen - start);
 
     free(s);
 
