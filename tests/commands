@@ -5,3 +5,4 @@
 ./tests/input/ocamlopt Iwan Jordan
 ./tests/input/multiple Tree BinaryTree
 ./tests/input/emoji 🌈  ✅
+./tests/input/chinese 樹 房子
