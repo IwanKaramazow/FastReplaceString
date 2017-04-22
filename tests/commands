@@ -4,3 +4,4 @@
 ./tests/input/lengthen OCaml Reason
 ./tests/input/ocamlopt Iwan Jordan
 ./tests/input/multiple Tree BinaryTree
+./tests/input/emoji 🌈  ✅
