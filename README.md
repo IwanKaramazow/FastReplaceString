@@ -1,7 +1,6 @@
 # FastReplaceString
-Fast native implementation in c of a replace string script as an npm package.
-Replaces a string in a file. (supports Unicode)
-
+Fast native implementation in c(++) of a replace string script as an npm package.
+Replaces a string in a file.
 ## Build status
 
 | Platform  | Status   |
@@ -41,6 +40,6 @@ npm run test
 * clone the repo
 * add a new file under `./tests/input/yourFileName`
 * add the expected file under `./tests/expected/yourFileName`
-* add a command in `./tests/commands` of form `filename src dest`, e.g. `./tests/input/yourFileName aString aReplacement`
-* make changes to `fastreplacestring.c` & `npm run build`
+* add a command in `./tests/test.js` of form `filename src dest`, e.g. `yourFileName aString aReplacement`
+* make changes to `fastreplacestring.cpp` & `npm run build`
 * `npm run test`
