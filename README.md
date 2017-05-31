@@ -59,8 +59,8 @@ to the following platforms:
 | -- | ---- | ----- | -- | ----- |
 | Linux | 32 | fastreplacestring-linux32.exe | 🚫  | |
 | | 64 | fastreplacestring-linux64.exe | ✅ | |
-| Windows | 32 | fastreplacestring-win32.exe | 🚫 |
-| | 64 | fastreplacestring-win64.exe | ✅ | |
+| Windows | 32 | fastreplacestring-win32.exe | ✅ |
+| | 64 | fastreplacestring-win64.exe | 🚫 | |
 | Darwin | 64 | fastreplacestring-darwin64.exe | ✅ | Not statically linked, requires gcc toolchain (default available on Mac) |
 
 All binaries are located in the `.bin` directory.
