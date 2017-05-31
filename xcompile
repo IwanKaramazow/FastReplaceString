@@ -6,5 +6,5 @@
 ~/opt/gcc-4.8.1-for-linux32/bin/i586-pc-linux-g++ -static -static-libgcc -static-libstdc++ -Ofast -o ./.bin/fastreplacestring-linux32.exe ./fastreplacestring.cpp
 ~/opt/gcc-4.8.1-for-linux64/bin/x86_64-pc-linux-g++ -static -static-libgcc -static-libstdc++ -Ofast -o ./.bin/fastreplacestring-linux64.exe ./fastreplacestring.cpp
 
-# mac not statically linked, this fails  
-# g++ -static -static-libgcc -static-libstdc++ v -Ofast -o ./.bin/fastreplacestring-darwin64 ./fastreplacestring.cpp
+# mac *not* statically linked  
+g++ -Ofast -o ./.bin/fastreplacestring-darwin64.exe ./fastreplacestring.cpp

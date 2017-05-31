@@ -8,7 +8,8 @@
     "frs": "./.bin/fastreplacestring.exe",
     "infer": "infer -- g++ -g -o ./.bin/fastreplacestring.exe ./fastreplacestring.cpp",
     "build": "g++ -Ofast -o ./.bin/fastreplacestring.exe ./fastreplacestring.cpp",
-    "test": "node ./tests/test.js"
+    "test": "node ./tests/test.js && node ./tests/xtest.js",
+    "xtest": "node ./tests/xtest.js"
   },
   "repository": {
     "type": "git",

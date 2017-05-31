@@ -16,6 +16,8 @@ var commands = [
   "chinese 樹 房子"
 ];
 
+console.log("RUNNING TESTS COMPILED FROM SOURCE\n");
+
 var executableCommand = path.join(".", ".bin", "fastreplacestring.exe");
 
 function sha1sum(strOrBuf) {
@@ -52,7 +54,7 @@ function testCommand(command) {
     cp.spawnSync(executableCommand, [reformattedFile, dest, src]);
 
     var result = fs.readFileSync(actualFile);
-    var expected = fs.readFileSync( expectedFile); //file.replace("input", "expected"));
+    var expected = fs.readFileSync(expectedFile); //file.replace("input", "expected"));
 
     var originalSha = sha1sum(fs.readFileSync(file));
     var resultSha = sha1sum(result);
@@ -85,7 +87,7 @@ function testCommand(command) {
 
 commands.forEach(testCommand);
 
-if(success) {
+if (success) {
   process.exit(0);
 } else {
   process.exit(1);
