@@ -55,20 +55,14 @@ node ./tests/xtest.js
 Fastreplacestring.exe has been cross compiled from a Macbook Pro (13" intel i5 early 2015 macOS Sierra 10.12.5)
 to the following platforms:
 
-| OS | ARCH | Binary | CI available | Notes |
+| OS | ARCH | Binary | CI available | 
 | -- | ---- | ----- | -- | ----- |
-| Linux | 32 | fastreplacestring-linux32.exe | 🚫  | |
-| | 64 | fastreplacestring-linux64.exe | ✅ | |
+| Linux | 32 | fastreplacestring-linux32.exe | 🚫  | 
+| | 64 | fastreplacestring-linux64.exe | ✅ | 
 | Windows | 32 | fastreplacestring-win32.exe | ✅ |
-| | 64 | fastreplacestring-win64.exe | 🚫 | |
-| Darwin | 64 | fastreplacestring-darwin64.exe | ✅ | Not statically linked, requires gcc toolchain (default available on Mac) |
+| | 64 | fastreplacestring-win64.exe | 🚫 | 
+| Darwin | 32 | fastreplacestring-darwin32.exe | 🚫 | 
+| | 64 | fastreplacestring-darwin64.exe | ✅ | 
 
 All binaries are located in the `.bin` directory.
 
-
-Linux 32 & 64bit toolchains were obtained from 
-<http://crossgcc.rts-software.org/doku.php?id=compiling_for_linux>,
-MinGW-w64 toolchain for windows 32bit & 64bit from:
-<https://sourceforge.net/projects/mingw-w64/files/>.
-All toolchains were placed on my local file system under `~/opt`.
-See `./xcompile` for actual compilation.
