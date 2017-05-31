@@ -56,7 +56,7 @@ Fastreplacestring.exe has been cross compiled from a Macbook Pro (13" intel i5 e
 to the following platforms:
 
 | OS | ARCH | Binary | CI available | 
-| -- | ---- | ----- | -- | ----- |
+| -- | ---- | ----- | -- | 
 | Linux | 32 | fastreplacestring-linux32.exe | 🚫  | 
 | | 64 | fastreplacestring-linux64.exe | ✅ | 
 | Windows | 32 | fastreplacestring-win32.exe | ✅ |
