@@ -23,8 +23,8 @@ test_script:
   - npm --version
   - npm run build
   # run tests
-  - node ./tests/test.js
   - node ./tests/xtest.js 
+  - node ./tests/test.js
 
 # Don't actually build.
 build: off
