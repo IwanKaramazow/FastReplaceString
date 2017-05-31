@@ -24,7 +24,7 @@ test_script:
   - npm run build
   # run tests
   - node ./tests/xtest.js 
-  - node ./tests/test.js
+    # - node ./tests/test.js
 
 # Don't actually build.
 build: off
