@@ -1,5 +1,6 @@
 #include <cstdio>
 #include <iostream>
+#include <sys/stat.h>
 #include <stdlib.h>
 #include <string.h>
 #include <string>
@@ -58,7 +59,7 @@ int main(int argc, char **argv) {
   // This is actually a shortcut because fopen might fail for a number of
   // reasons
   if (in == NULL) {
-    cout << filename + " doesn't exist\n";
+    cout << "error: " + filename + " doesn't exist\n";
     return 1;
   }
 
@@ -137,14 +138,23 @@ int main(int argc, char **argv) {
 
     free(s);
 
-    // write the result to a temp file
-    // wb mode opens the file for writing and makes it empty
-    freopen(filename.c_str(), "wb", in);
+    // stat file so we can restore st_mode
+    struct stat st;
+    stat(filename.c_str(), &st);
+
+    // change st_mode so we can open file for writing
+    chmod(filename.c_str(), S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP);
+    in = freopen(filename.c_str(), "wb", in);
     if (in == NULL) {
-      cout << filename + " cannot be written to.\n";
+      cout << "error: " + filename + " cannot be written to.\n";
       return 1;
     }
+
     fwrite(t, 1, newFilelen, in);
+    fclose(in);
+
+    // restore st_mode
+    chmod(filename.c_str(), st.st_mode);
   }
 
   return 0;
