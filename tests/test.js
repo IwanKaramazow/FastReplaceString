@@ -7,6 +7,7 @@ var success = true;
 
 var commands = [
   "basic reason ocaml",
+  "no-perm reason ocaml",
   "nothing house church",
   "shorten rank-2 Mac",
   "lengthen OCaml Reason",
@@ -42,13 +43,29 @@ function testCommand(command) {
     }
     var fileName = tokens[0];
     var file = path.join(".", "tests", "input", fileName);
+    var stats = fs.statSync(file);
     var src = tokens[1];
     var dest = tokens[2];
+
     var actualFile = path.join(".", "tests", "actual", fileName); // file.replace("input", "actual");
+    try { fs.unlinkSync(actualFile) } catch(_err) {}
+
     var expectedFile = path.join(".", "tests", "expected", fileName);
+
     var reformattedFile = actualFile + ".reformatted";
+    try { fs.unlinkSync(reformattedFile) } catch(_err) {}
+
     fs.writeFileSync(actualFile, fs.readFileSync(file));
+    fs.chmodSync(actualFile, stats.mode);
     cp.spawnSync(executableCommand, [actualFile, src, dest]);
+
+    var actualStats = fs.statSync(actualFile);
+    if (stats.mode !== actualStats.mode) {
+      console.log("🔥   Test failed!");
+      console.log("expected mode: ", stats.mode);
+      console.log("  actual mode: ", actualStats.mode);
+      success = false;
+    }
 
     fs.writeFileSync(reformattedFile, fs.readFileSync(file));
     cp.spawnSync(executableCommand, [reformattedFile, dest, src]);
